@@ -1,45 +1,43 @@
+-----Configuring Nagios Monitor System----
 1-add user
 #sudo useradd nagios 
 2-add group
 #sudo groupadd newnagcmd
-3-add new user
-#sudo useradd newnagios
-4-give user permission
+3-give user permission
 #sudo usermod -a -G newnagcmd newnagios
-#sudo usermod -a -G newnagcmd jlaurier
-5-in nagios download folder
+4-in nagios download folder
 # ./configure --with-nagios-group=newnagios --with-command-group=newnagcmd --with-mail=/usr/bin/sendmail -with-httpd-conf=/etc/apache2/sites-enabled
-6-after command 5 completed result
+5-after command 4 completed result
  Web Interface Options:
  ------------------------
                  HTML URL:  http://localhost/nagios/
                   CGI URL:  http://localhost/nagios/cgi-bin/
  Traceroute (used by WAP):
-7-
+6-
 #sudo make all
-8-
+7-
 #sudo make install
-9-
+8-
 #sudo make install-init
-10-
+9-
 #sudo make install-config
-11-
+10-
 #sudo make install-commandmode
-12-
+11-
 #sudo make install-webconf
-13-
+12-
 #sudo cp -R contrib/eventhandlers/user/local/nagios/libexec
-14-
+13-
 #sudo cp -R contrib/eventhandlers/ /usr/local/nagios/libexec
-15-
+14-
 #sudo chown -R nagios:nagios/usr/local/nagios/libexec/eventhandlers
-16- check configuration if nagios
+15- check configuration if nagios
 #sudo /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
-17-
+16-
 #sudo /etc/init.d/nagios start
-18- if start failed
+17- if start failed
 #sudo vi /etc/systemd/system/nagios.service
-19- Paste file
+18- Paste file
 [Unit]
 Description=Nagios
 BindTo=network.target
@@ -53,36 +51,36 @@ User=nagios
 Group=nagios
 Type=simple
 ExecStart=/usr/local/nagios/bin/nagios /usr/local/nagios/etc/nagios.cfg
-20-
+19-
 #sudo systemctl enable /etc/systemd/system/nagios.service
-21-
+20-
 #sudo systemctl  start nagios
-22-
+21-
 #sudo systemctl  restart nagios
-23-
+22-
 #sudo /etc/init.d/nagios start
-24-reset password
+23-reset password
 #sudo htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
 
 Install plugin
-25-
+24-
 #sudo ./configure --with-nagios-user=nagios --with-nagios-group=nagios
-26-
+25-
 #sudo make
-27-
+26-
 #sudo make install
-28-
+27-
 #sudo ln -s /etc/init.d/nagios /etc/rcS.d/S99nagios
-29-
+28-
 #sudo iptables -I INPUT -p tcp --destination-port 80 -j ACCEPT
-30-
+29-
 #sudo apt-get install -y iptables-persistent
 --Press Enter on Yes to save current IPv4 rules
-31-
+30-
 #sudo a2enmod
 #sudo a2enmod rewrite
 #sudo a2enmod cgi
-32-
+31-
 #sudo service nagios start
 #sudo service apache2 start
 ---nagios completed
