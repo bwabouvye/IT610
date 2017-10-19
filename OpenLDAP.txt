@@ -1,0 +1,96 @@
+Configuring LDAP Server
+Step 1: Install OpenLDAP
+#sudo apt-get install slapd ldap-utils
+
+give the Admin password/root password
+Re-enter the password of Admin/root
+
+Step2: Login to Root and change the hostname
+#su - 
+give the password
+
+Changing the hostname:
+#gedit /etc/hostname
+give the name: eg. server .ldap.com
+save the file
+
+Reboot the machine
+
+Step3: Configure OpenLDAP
+Open the file
+#gedit /etc/ldap/ldap.conf
+Make sure the file looks as follows:
+#
+# LDAP Defaults
+#
+
+# see ldap.config(5) for details
+# This file should be world readable but not world writable.
+
+BASE dc=ldap,dc=com
+URI  ldap://localhost:389
+
+#SIZELIMIT   12
+#TIMELIMIT   15
+#DEREF       NeVER
+
+# TLS certificates (needed for GnuTLS)
+TLS_CACERT         /etc/ssl/certs/ca-certificates.crt
+
+Save the file and exit
+
+Step 4: Reconfigure the slapd with the updated values
+#dpkg-reconfigure slapd
+
+select "No" and Press Enter
+
+Enter the DNS Domain Name
+ldap.com
+
+Enter the Organization Name: Enter any name
+e.g IT610
+
+Enter the LDAP admin Passoword
+
+Select the backend Database
+Choose the Default Only
+
+On the next screen select "No"
+click Yes to Move the Old Database
+Select "No" under LDAPv2 Protocol
+
+Step 5: Test the openLDAP
+#ldapsearch -x
+
+PART -B LDAP Server Administration
+Install phpldapadmin Package
+#apt-get install phpldapadmin
+#gedit /etc/phpldapamin/config.php
+
+#get IP address of your machine
+#ifconfig (10.0.2.15)
+
+1. Edit the following value
+Set your LDAP server name
+$server->setValue('server','name', Anand LDAP Server');
+
+Set your LDAP server IP address
+$server->setValue('server','host','IP-Address');
+
+set Server domain name
+$server->setValue('server','base',array('dc=ldap,dc=com'));
+
+Set Server domain name again
+$server->setValue('login','bind_id','cn-admin,dc-ldap,dc-com')
+
+$config->custom->appearance['hide_template_warning'] = true;
+
+Exit the file
+
+#systemctl restart apache2
+
+Open Web browser
+http://IP-Address/phpldapadmin
+
+Mylink: http://10.0.2.15/phpldapadmin 
+
